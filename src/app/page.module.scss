@@ -1,0 +1,453 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+@use "@/styles/effects" as *;
+
+.wrapper {
+  position: relative;
+  width: min(400px, 96vw);
+
+  @include mobile {
+    width: 100vw;
+  }
+}
+
+.callCorner,
+.themeToggle {
+  position: absolute;
+  top: $sp-sm;
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-full;
+  @include flex-center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.callCorner {
+  left: $sp-sm;
+  background: linear-gradient(135deg, $accent, #1d4ed8);
+  color: $pure-white;
+  border: none;
+  box-shadow: 0 4px 14px rgba($accent, 0.4);
+  @include call-corner-btn;
+}
+
+.themeToggle {
+  right: $sp-sm;
+  background: var(--item-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: all $t-bounce, background-color 0.35s ease, color 0.2s ease;
+
+  &:hover {
+    background: color-mix(in srgb, $accent 12%, var(--surface));
+    border-color: $accent;
+    color: $accent;
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba($accent, 0.25);
+  }
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+  background: var(--bg);
+  border-radius: $radius-lg;
+  padding: 56px $sp-lg $sp-md;
+  @include card-shadow;
+  @include flex-col-center;
+  gap: $sp-sm;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    background-color 0.35s ease,
+    box-shadow 0.35s ease,
+    opacity 0.5s $t-slow,
+    transform 0.5s $t-slow;
+
+  &.visible { opacity: 1; transform: translateY(0); }
+
+  @include mobile {
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 56px $sp-md $sp-md;
+    justify-content: center;
+  }
+}
+
+.themeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: themeIconIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.avatarOuter {
+  position: relative;
+  width: 94px;
+  height: 94px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+}
+
+.avatarWrap {
+  position: absolute;
+  inset: 0;
+  border-radius: $radius-full;
+  overflow: hidden;
+  background: var(--surface);
+  z-index: 1;
+  transition: background-color 0.35s ease;
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+// Identity
+.identity {
+  @include flex-col-center;
+  gap: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.jobTitle {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.bio {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+// Resume
+.resumeWrap {
+  position: relative;
+  @include flex-center;
+}
+
+.resumeBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-xs;
+  padding: 8px $sp-md;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $accent, #1d4ed8);
+  color: $pure-white;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid rgba($accent, 0.3);
+  box-shadow: 0 6px 20px rgba($accent, 0.3);
+  min-width: 110px;
+  justify-content: center;
+}
+
+
+// Divider
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  border: none;
+  flex-shrink: 0;
+  @include divider-scanline;
+}
+
+// Contacts
+.contactList {
+  width: 100%;
+  @include flex-col;
+  gap: 6px;
+}
+
+.contactRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  animation: contactSlideIn 0.4s ease both;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: $sp-sm;
+  padding: 7px $sp-sm;
+  border-radius: $radius;
+  background: var(--item-bg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  color: var(--text);
+  flex: 1;
+  @include contact-item-hover;
+
+  &.loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
+.contactIconWrap {
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+  @include flex-center;
+  color: $pure-white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition:
+    transform $t-base,
+    box-shadow $t-base;
+}
+
+.contactContent {
+  @include flex-col;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.contactLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  transition: color $t-base;
+}
+
+.contactValue {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color $t-base;
+}
+
+.copyBtn {
+  @include button-reset;
+  @include flex-center;
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-full;
+  color: var(--text-light);
+  background: transparent;
+  flex-shrink: 0;
+  transition: all $t-base;
+
+  &:hover {
+    color: $accent;
+    background: color-mix(in srgb, $accent 12%, var(--surface));
+    transform: scale(1.15);
+  }
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+// Success overlay
+.successOverlay {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-radius: $radius;
+  @include flex-center;
+  z-index: 20;
+  animation: fadeIn 0.15s ease;
+  pointer-events: none;
+}
+
+.successCircle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.successSvg {
+  width: 46px;
+  height: 46px;
+  filter: drop-shadow(0 4px 16px rgba(22, 163, 74, 0.55));
+}
+
+.successBg {
+  fill: #16a34a;
+}
+
+.successCheck {
+  fill: none;
+  stroke: $pure-white;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: drawCheck 0.4s ease 0.15s forwards;
+}
+
+.successText {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #16a34a;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: fadeIn 0.3s ease 0.3s both;
+}
+
+// Loading dots
+.loadingDot {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+
+  span {
+    width: 4px;
+    height: 4px;
+    border-radius: $radius-full;
+    background: currentColor;
+    animation: loadingPulse 0.9s ease-in-out infinite;
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+
+// Tech Stack — FIXED: overflow visible, no filter, proper z-index
+.section {
+  width: 100%;
+  @include flex-col-center;
+  gap: $sp-xs;
+  overflow: visible;
+}
+
+.label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-light);
+}
+
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  overflow: visible;
+  position: relative;
+  padding-bottom: $sp-sm;
+}
+
+.techIcon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  background: var(--tech-bg);
+  color: var(--tech-color);
+  @include flex-center;
+  cursor: default;
+  z-index: 0;
+  @include tech-icon-hover;
+}
+
+.techTooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--text);
+  color: var(--surface);
+  font-size: 0.58rem;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity $t-base,
+    transform $t-base;
+  z-index: 100;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--text);
+  }
+}
+
+// Footer
+.footer {
+  width: 100%;
+  text-align: center;
+  padding-top: 2px;
+
+  small {
+    font-size: 0.6rem;
+    color: var(--text-light);
+  }
+}
+
+@keyframes themeIconIn {
+  from {
+    transform: scale(0) rotate(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes avatarPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px $accent,
+      0 0 0 6px rgba($accent, 0.1),
+      0 0 18px rgba($accent, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px #7c3aed,
+      0 0 0 8px rgba(124, 58, 237, 0.12),
+      0 0 28px rgba(124, 58, 237, 0.38);
+  }
+}

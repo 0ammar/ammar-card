@@ -1,0 +1,22 @@
+$font-display: "Space Grotesk", sans-serif;
+$font-body:    "Inter", sans-serif;
+
+$accent:      #2563eb;
+$pure-white:  #ffffff;
+
+$sp-xs:  4px;
+$sp-sm:  8px;
+$sp-md:  16px;
+$sp-lg:  24px;
+$sp-xl:  32px;
+
+$radius:      10px;
+$radius-lg:   20px;
+$radius-full: 9999px;
+
+$t-base:   0.2s ease;
+$t-slow:   0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$t-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+$bp-mobile: 480px;
+$bp-tablet: 768px;

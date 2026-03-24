@@ -1,0 +1,59 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap");
+
+:root {
+  --font-display: #{$font-display};
+  --font-body:    #{$font-body};
+  --bg:           #ffffff;
+  --surface:      #ffffff;
+  --border:       #e8e8e8;
+  --text:         #0f172a;
+  --text-muted:   #64748b;
+  --text-light:   #94a3b8;
+  --item-bg:      #f4f4f4;
+}
+
+[data-theme="dark"] {
+  --bg:         #0a0a0a;
+  --surface:    #111111;
+  --border:     #2a2a2a;
+  --text:       #f0f0f0;
+  --text-muted: #909090;
+  --text-light: #555555;
+  --item-bg:    #1e1e1e;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg);
+  transition: background-color 0.35s ease;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  @include flex-center;
+  padding: $sp-md;
+  transition: background-color 0.35s ease, color 0.2s ease;
+}
+
+a      { color: inherit; text-decoration: none; }
+img    { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+button { border: 0; background: none; color: inherit; font: inherit; cursor: pointer; outline: none; }
+
+::selection {
+  background: $accent;
+  color: $pure-white;
+}
