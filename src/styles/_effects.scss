@@ -1,11 +1,5 @@
 @use "@/styles/variables" as *;
 
-@mixin card-shadow {
-  box-shadow:
-    0 0 0 1px var(--border),
-    0 4px 6px -1px rgba(0, 0, 0, 0.06),
-    0 20px 40px -8px rgba(0, 0, 0, 0.1);
-}
 
 @mixin divider-scanline {
   position: relative;

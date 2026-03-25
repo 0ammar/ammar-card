@@ -43,7 +43,6 @@
   border: 1px solid var(--border);
   color: var(--text-muted);
   border-color: $accent;
-  box-shadow: 0 0 0 3px color-mix(in srgb, $accent 15%, transparent);
   color: $accent;
   transition:
     border-color $t-base,
@@ -108,21 +107,16 @@
     display: none;
   }
   background: var(--bg);
-  border-radius: $radius-lg;
   padding: 56px $sp-lg $sp-md;
-  @include card-shadow;
   @include flex-col-center;
   gap: $sp-sm;
-  opacity: 0;
   transform: translateY(16px);
   transition:
     background-color 0.35s ease,
-    box-shadow 0.35s ease,
     opacity 0.5s $t-slow,
     transform 0.5s $t-slow;
 
   &.visible {
-    opacity: 1;
     transform: translateY(0);
   }
 
@@ -242,7 +236,8 @@
 .jobTitle {
   font-size: 0.65rem;
   font-weight: 500;
-  color: var(--text-light);
+  color:  #1d4ed8;
+
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }

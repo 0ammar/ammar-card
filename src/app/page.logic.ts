@@ -4,7 +4,7 @@ export type ActionId = string | null;
 export const PROFILE = {
   name: "Ammar Arab",
   title: "Software Engineer",
-  bio: "I care about the details most developers skip.",
+  bio: "Building products end-to-end — from blank file to live app.",
   footer: "© 2026 Ammar Arab",
   phone: "+962788482930",
   avatar: "/me-7.png",

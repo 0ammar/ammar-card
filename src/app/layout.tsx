@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     images: ["/me-7.png"],
   },
   alternates: { canonical: "https://ammararab.com" },
+  icons: {
+    icon: "/me-7.png",
+    apple: "/me-7.png",
+    shortcut: "/me-7.png",
+  },
 };
 
 const jsonLd = {
@@ -39,6 +44,7 @@ const jsonLd = {
   knowsAbout: ["React.js", "Next.js", "TypeScript", "Node.js", "NestJS", "React Native"],
   address: { "@type": "PostalAddress", addressLocality: "Amman", addressCountry: "JO" },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
