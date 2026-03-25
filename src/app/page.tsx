@@ -172,7 +172,6 @@ export default function Home() {
               ? <LoadingDot />
               : <><FiDownload size={13} /><span>Resume</span></>
             }
-            <span className={styles.resumeShine} aria-hidden="true" />
           </a>
           {copiedId === "resume" && (
             <div className={styles.successOverlay} aria-live="polite">

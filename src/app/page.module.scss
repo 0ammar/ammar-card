@@ -239,16 +239,6 @@
   @include resume-hover;
 }
 
-.resumeShine {
-  position: absolute;
-  inset: 0;
-  width: 40%;
-  background: rgba(255, 255, 255, 0.3);
-  -webkit-transform: translateX(-100%) skewX(-15deg);
-  transform: translateX(-100%) skewX(-15deg);
-  pointer-events: none;
-}
-
 // ─── Divider ─────────────────────────────────────────────────────────────────
 
 .divider {
