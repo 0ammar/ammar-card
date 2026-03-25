@@ -269,9 +269,6 @@ export default function Home() {
           </ul>
         </section>
 
-        <footer className={styles.footer}>
-          <small>{PROFILE.footer}</small>
-        </footer>
         {photoOpen && (
           <div
             className={styles.lightbox}
