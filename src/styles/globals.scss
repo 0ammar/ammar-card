@@ -46,6 +46,8 @@ body {
   @include flex-center;
   padding: $sp-md;
   transition: background-color 0.35s ease, color 0.2s ease;
+  min-height: -webkit-fill-available;
+  overscroll-behavior: none;
 }
 
 a      { color: inherit; text-decoration: none; }
