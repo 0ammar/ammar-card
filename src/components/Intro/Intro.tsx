@@ -3,197 +3,227 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Intro.module.scss";
 
-interface Particle {
-    x: number; y: number;
-    tx: number; ty: number;
-    vx: number; vy: number;
-    size: number;
-    alpha: number;
-    color: string;
+const NAME = "AMMAR ARAB";
+const SUB = "SOFTWARE ENGINEER";
+const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&01";
+const pick = (s: string) => s[Math.floor(Math.random() * s.length)];
+
+const CODE_LINES = [
+    "const engineer = new FullStack({ passion: true });",
+    "import { React, NextJS, TypeScript } from 'stack';",
+    "git commit -m 'ship it clean, ship it fast'",
+    "npm run build && vercel deploy --prod",
+    "type Solution = Problem extends Hard ? Solved : Never;",
+    "useEffect(() => { buildSomethingGreat(); }, []);",
+    "export default function solve(problem) { return fix(it); }",
+    "SELECT * FROM projects WHERE quality = 'high';",
+    "const api = await fetch('/v1/make-it-work');",
+    "interface Dev { skills: string[]; breaks: never; }",
+    "git push origin main --force-with-lease",
+    "const perf = lighthouse({ score: 100 });",
+    "await Promise.all([design, code, deploy]);",
+    "// TODO: sleep (never merged)",
+    "const bug = null; // fixed 2:47am",
+    "border: 1px solid red; /* debug mode */",
+    "console.log('it works on my machine');",
+    "return <Component style={{ perfect: true }} />;",
+    "zsh: command not found: giving-up",
+    "ssh root@server 'pm2 restart all'",
+    "npx create-next-app@latest --typescript",
+    "const ui = css`clean · minimal · pixel-perfect`;",
+    "module.exports = { clean: true, fast: true };",
+    "yarn add framer-motion && animate everything",
+    "docker build -t ammararab/app:latest .",
+];
+
+interface Column {
+    x: number;
+    y: number;
     speed: number;
-}
-
-const ACCENT = "#2563eb";
-const COLORS = [ACCENT, "#3b82f6", "#60a5fa", "#93c5fd", "#ffffff"];
-
-function randBetween(a: number, b: number) {
-    return a + Math.random() * (b - a);
+    lineIdx: number;
+    alpha: number;
+    fontSize: number;
 }
 
 export default function Intro({ onDone }: { onDone: () => void }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [nameChars, setNameChars] = useState<string[]>(() => Array(NAME.length).fill("·"));
+    const [subChars, setSubChars] = useState<string[]>(() => Array(SUB.length).fill(" "));
+    const [locked, setLocked] = useState<boolean[]>(() => Array(NAME.length).fill(false));
+    const [subOn, setSubOn] = useState(false);
+    const [lineOn, setLineOn] = useState(false);
     const [leaving, setLeaving] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
         let raf: number;
-        let phase: "explode" | "pull" | "hold" | "shatter" | "done" = "explode";
-        let phaseTimer = 0;
-        const particles: Particle[] = [];
-        const textParticles: Particle[] = [];
+        let W = canvas.width = window.innerWidth;
+        let H = canvas.height = window.innerHeight;
+        const columns: Column[] = [];
 
-        const W = canvas.width = window.innerWidth;
-        const H = canvas.height = window.innerHeight;
+        const isLight = () => {
+            const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+            return bg === "#ffffff" || bg.startsWith("#f");
+        };
 
-        const cx = W / 2;
-        const cy = H / 2;
-
-        const fontSize = Math.min(W * 0.12, 80);
-        const fontSize2 = Math.min(W * 0.04, 24);
-
-        ctx.font = `700 ${fontSize}px 'Space Grotesk', sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#fff";
-        ctx.fillText("AMMAR ARAB", cx, cy - fontSize2);
-
-        ctx.font = `500 ${fontSize2}px 'Inter', sans-serif`;
-        ctx.fillStyle = ACCENT;
-        ctx.fillText("SOFTWARE ENGINEER", cx, cy + fontSize * 0.65);
-
-        const imgData = ctx.getImageData(0, 0, W, H);
-        ctx.clearRect(0, 0, W, H);
-
-        const STEP = Math.max(3, Math.floor(W / 220));
-        for (let y = 0; y < H; y += STEP) {
-            for (let x = 0; x < W; x += STEP) {
-                const idx = (y * W + x) * 4;
-                if (imgData.data[idx + 3] > 60) {
-                    textParticles.push({
-                        tx: x, ty: y,
-                        x: randBetween(0, W),
-                        y: randBetween(0, H),
-                        vx: 0, vy: 0,
-                        size: randBetween(1.2, 2.8),
-                        alpha: 0,
-                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
-                        speed: randBetween(0.06, 0.14),
-                    });
-                }
+        const buildColumns = () => {
+            columns.length = 0;
+            const spacing = 260;
+            const count = Math.ceil(W / spacing) + 2;
+            for (let i = 0; i < count; i++) {
+                columns.push({
+                    x: (W / count) * i + Math.random() * 30 - 15,
+                    y: Math.random() * H - H,
+                    speed: 0.4 + Math.random() * 0.5,
+                    lineIdx: Math.floor(Math.random() * CODE_LINES.length),
+                    alpha: 0.5 + Math.random() * 0.4,
+                    fontSize: 12 + Math.floor(Math.random() * 3),
+                });
             }
-        }
+        };
 
-        for (let i = 0; i < 200; i++) {
-            particles.push({
-                x: randBetween(0, W), y: randBetween(0, H),
-                tx: cx + randBetween(-W * 0.4, W * 0.4),
-                ty: cy + randBetween(-H * 0.4, H * 0.4),
-                vx: randBetween(-3, 3),
-                vy: randBetween(-3, 3),
-                size: randBetween(1, 3),
-                alpha: 1,
-                color: COLORS[Math.floor(Math.random() * COLORS.length)],
-                speed: 0,
-            });
-        }
+        buildColumns();
 
-        let elapsed = 0;
-        const lastTime = { val: performance.now() };
+        const draw = () => {
+            const light = isLight();
+            const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || (light ? "#ffffff" : "#0a0a0a");
 
-        const draw = (now: number) => {
-            const dt = Math.min(now - lastTime.val, 32);
-            lastTime.val = now;
-            elapsed += dt;
-            phaseTimer += dt;
-
-            ctx.clearRect(0, 0, W, H);
-
-            const bg = getComputedStyle(document.documentElement)
-                .getPropertyValue("--bg").trim() || "#050505";
             ctx.fillStyle = bg;
             ctx.fillRect(0, 0, W, H);
 
-            if (phase === "explode") {
-                for (const p of particles) {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.alpha = Math.max(0, p.alpha - 0.012);
-                    ctx.globalAlpha = p.alpha;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
+            for (const col of columns) {
+                col.y += col.speed;
+                if (col.y > H + 80) {
+                    col.y = -60;
+                    col.lineIdx = Math.floor(Math.random() * CODE_LINES.length);
+                    col.alpha = 0.5 + Math.random() * 0.4;
                 }
-                for (const p of textParticles) {
-                    p.alpha = Math.min(1, p.alpha + 0.018);
-                    const t = p.speed;
-                    p.x += (p.tx - p.x) * 0.04;
-                    p.y += (p.ty - p.y) * 0.04;
-                    ctx.globalAlpha = p.alpha * 0.3;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size * 0.6, 0, Math.PI * 2);
-                    ctx.fill();
-                    void t;
-                }
-                if (phaseTimer > 600) { phase = "pull"; phaseTimer = 0; }
 
-            } else if (phase === "pull") {
-                for (const p of textParticles) {
-                    p.x += (p.tx - p.x) * p.speed;
-                    p.y += (p.ty - p.y) * p.speed;
-                    p.alpha = Math.min(1, p.alpha + 0.03);
-                    ctx.globalAlpha = p.alpha;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                if (phaseTimer > 1000) { phase = "hold"; phaseTimer = 0; }
+                ctx.font = `${col.fontSize}px 'Fira Code', 'Courier New', monospace`;
+                ctx.globalAlpha = col.alpha;
+                ctx.shadowBlur = col.alpha > 0.75 ? 8 : 0;
+                ctx.shadowColor = "#3b82f6";
+                ctx.fillStyle = light
+                    ? col.alpha > 0.75 ? "rgba(29, 78, 216, 0.9)" : "rgba(30, 64, 175, 0.65)"
+                    : col.alpha > 0.75 ? "rgba(147, 197, 253, 0.95)" : "rgba(96, 165, 250, 0.65)";
 
-            } else if (phase === "hold") {
-                for (const p of textParticles) {
-                    p.x += (p.tx - p.x) * 0.2;
-                    p.y += (p.ty - p.y) * 0.2;
-                    const jitter = Math.sin(elapsed * 0.003 + p.tx) * 0.3;
-                    ctx.globalAlpha = p.alpha;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x + jitter, p.y + jitter, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                if (phaseTimer > 900) { phase = "shatter"; phaseTimer = 0; }
-
-            } else if (phase === "shatter") {
-                for (const p of textParticles) {
-                    p.vx += randBetween(-0.4, 0.4);
-                    p.vy += randBetween(-0.4, 0.4);
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.alpha = Math.max(0, p.alpha - 0.028);
-                    ctx.globalAlpha = p.alpha;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                if (phaseTimer > 600) { phase = "done"; }
-
-            } else if (phase === "done") {
-                ctx.globalAlpha = 0;
-                ctx.clearRect(0, 0, W, H);
-                cancelAnimationFrame(raf);
-                setLeaving(true);
-                setTimeout(onDone, 650);
-                return;
+                ctx.fillText(CODE_LINES[col.lineIdx], col.x, col.y);
+                ctx.shadowBlur = 0;
             }
 
             ctx.globalAlpha = 1;
+
+            const grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.7);
+            grad.addColorStop(0, light ? "rgba(255,255,255,0.72)" : "rgba(10,10,10,0.72)");
+            grad.addColorStop(0.5, light ? "rgba(255,255,255,0.5)" : "rgba(10,10,10,0.5)");
+            grad.addColorStop(1, light ? "rgba(255,255,255,0.1)" : "rgba(10,10,10,0.1)");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
             raf = requestAnimationFrame(draw);
         };
 
-        raf = requestAnimationFrame(draw);
-        return () => cancelAnimationFrame(raf);
+        draw();
+
+        const onResize = () => {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+            buildColumns();
+        };
+        window.addEventListener("resize", onResize);
+        return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", onResize); };
+    }, []);
+
+    useEffect(() => {
+        const timers: ReturnType<typeof setTimeout>[] = [];
+        let scramble: ReturnType<typeof setInterval> | null = null;
+        let lockIdx = 0;
+        const lockedArr = Array(NAME.length).fill(false);
+
+        timers.push(setTimeout(() => setLineOn(true), 300));
+
+        timers.push(setTimeout(() => {
+            scramble = setInterval(() => {
+                setNameChars(prev => prev.map((_, i) => lockedArr[i] ? NAME[i] : pick(POOL)));
+            }, 40);
+        }, 500));
+
+        const lockNext = () => {
+            if (lockIdx >= NAME.length) {
+                if (scramble) clearInterval(scramble);
+                setNameChars(NAME.split(""));
+                setLocked(Array(NAME.length).fill(true));
+
+                timers.push(setTimeout(() => {
+                    setSubOn(true);
+                    let si = 0;
+                    const revealSub = () => {
+                        if (si >= SUB.length) {
+                            timers.push(setTimeout(() => { setLeaving(true); setTimeout(onDone, 800); }, 1600));
+                            return;
+                        }
+                        const idx = si++;
+                        setSubChars(prev => { const n = [...prev]; n[idx] = SUB[idx]; return n; });
+                        timers.push(setTimeout(revealSub, SUB[idx] === " " ? 40 : 55));
+                    };
+                    timers.push(setTimeout(revealSub, 150));
+                }, 250));
+                return;
+            }
+
+            const i = lockIdx++;
+            lockedArr[i] = true;
+            setLocked([...lockedArr]);
+            setNameChars(prev => { const n = [...prev]; n[i] = NAME[i]; return n; });
+            timers.push(setTimeout(lockNext, 65));
+        };
+
+        timers.push(setTimeout(lockNext, 1000));
+
+        return () => { timers.forEach(clearTimeout); if (scramble) clearInterval(scramble); };
     }, [onDone]);
 
     return (
         <div className={`${styles.intro} ${leaving ? styles.leaving : ""}`} aria-hidden="true">
             <canvas ref={canvasRef} className={styles.canvas} />
+            <div className={styles.scanlines} />
+            <div className={styles.vignette} />
+
+            <div className={styles.center}>
+                <div className={`${styles.line} ${lineOn ? styles.lineOn : ""}`} />
+
+                <p className={styles.name}>
+                    {nameChars.map((ch, i) => (
+                        <span
+                            key={i}
+                            className={[
+                                styles.char,
+                                locked[i] ? styles.charLocked : "",
+                                NAME[i] === " " ? styles.charSpace : "",
+                            ].filter(Boolean).join(" ")}
+                        >
+                            {ch}
+                        </span>
+                    ))}
+                </p>
+
+                <div className={`${styles.line} ${lineOn ? styles.lineOn : ""}`} />
+
+                <p className={`${styles.sub} ${subOn ? styles.subOn : ""}`}>
+                    {subChars.map((ch, i) => (
+                        <span
+                            key={i}
+                            className={`${styles.subChar} ${ch !== " " && ch !== "" ? styles.subCharOn : ""}`}
+                        >
+                            {ch === " " ? "\u00A0" : ch}
+                        </span>
+                    ))}
+                </p>
+            </div>
         </div>
     );
 }
