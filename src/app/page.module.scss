@@ -39,15 +39,16 @@
 
 .themeToggle {
   right: $sp-sm;
-  background: var(--item-bg);
-  color: var(--text);
+  background: var(--surface);
   border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-color: $accent;
+  box-shadow: 0 0 0 3px color-mix(in srgb, $accent 15%, transparent);
+  color: $accent;
   transition:
-    background-color $t-base,
-    color $t-base,
     border-color $t-base,
-    transform $t-bounce,
-    box-shadow $t-bounce;
+    box-shadow $t-base,
+    transform $t-bounce;
 
   &[data-mounted="false"] {
     opacity: 0;
@@ -55,22 +56,43 @@
   }
   &[data-mounted="true"] {
     opacity: 1;
+    transition:
+      opacity 0.3s ease,
+      border-color $t-base,
+      box-shadow $t-base,
+      transform $t-bounce;
   }
 
   &:hover {
-    background: color-mix(in srgb, $accent 12%, var(--surface));
-    border-color: $accent;
-    color: $accent;
-    transform: scale(1.1);
-    box-shadow: 0 4px 14px rgba($accent, 0.25);
+    transform: scale(1.06);
+  }
+
+  &:active {
+    transform: scale(0.96);
   }
 }
 
 .themeIcon {
   @include flex-center;
-  animation: themeIconIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 16px;
+  height: 16px;
+  animation: themeIconSpin 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+@keyframes themeIconSpin {
+  0% {
+    transform: rotate(180deg) scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-10deg) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
 // ─── Card ───────────────────────────────────────────────────────────────────
 
 .card {
@@ -114,54 +136,72 @@
 }
 
 // ─── Avatar ─────────────────────────────────────────────────────────────────
-
 .avatarOuter {
   position: relative;
-  width: 94px;
-  height: 94px;
+  width: 96px;
+  height: 96px;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .avatarRing {
   position: absolute;
   inset: -4px;
   border-radius: $radius-full;
-  background: conic-gradient(
-    from 0deg,
-    $accent,
-    #60a5fa,
-    #1d4ed8,
-    #3b82f6,
-    $accent
-  );
-  animation: spinRing 3s linear infinite;
+  border: 1.5px solid color-mix(in srgb, $accent 35%, transparent);
+  animation: gentleRotate 12s linear infinite;
   z-index: 0;
+  pointer-events: none;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: $accent;
+    border-radius: $radius-full;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow:
+      0 0 6px $accent,
+      0 0 12px color-mix(in srgb, $accent 40%, transparent);
+  }
 }
 
 .avatarRing2 {
   position: absolute;
-  inset: -8px;
+  inset: -4px;
   border-radius: $radius-full;
-  background: conic-gradient(
-    from 180deg,
-    rgba($accent, 0),
-    rgba($accent, 0.35),
-    rgba(#60a5fa, 0.2),
-    rgba($accent, 0)
-  );
-  animation: spinRing 3s linear infinite reverse;
-  filter: blur(4px);
+  border: 1.5px solid transparent;
+  background: transparent;
   z-index: 0;
+  pointer-events: none;
 }
 
 .avatarWrap {
   position: absolute;
-  inset: 3px;
+  inset: 0;
   border-radius: $radius-full;
   overflow: hidden;
   background: var(--surface);
   z-index: 1;
-  transition: background-color 0.35s ease;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3px $accent,
+    0 0 12px color-mix(in srgb, $accent 20%, transparent);
+  transition:
+    background-color 0.35s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow:
+      0 0 0 2px var(--bg),
+      0 0 0 3px $accent,
+      0 0 20px color-mix(in srgb, $accent 35%, transparent);
+  }
 }
 
 .avatar {
@@ -170,6 +210,15 @@
   object-fit: cover;
   object-position: top;
   display: block;
+}
+
+@keyframes gentleRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // ─── Identity ────────────────────────────────────────────────────────────────
@@ -236,7 +285,6 @@
   -webkit-justify-content: center;
   justify-content: center;
   -webkit-tap-highlight-color: transparent;
-  @include resume-hover;
 }
 
 // ─── Divider ─────────────────────────────────────────────────────────────────
@@ -706,22 +754,92 @@
 
 // ─── Keyframes ───────────────────────────────────────────────────────────────
 
-@keyframes themeIconIn {
-  from {
-    transform: scale(0) rotate(-90deg);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
-}
-
 @keyframes spinRing {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  @include flex-center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  cursor: pointer;
+}
+
+.lightboxInner {
+  position: relative;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  animation: lightboxPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow:
+    0 0 0 1px rgba($accent, 0.3),
+    0 32px 64px rgba(0, 0, 0, 0.5),
+    0 0 40px color-mix(in srgb, $accent 15%, transparent);
+  cursor: default;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: $radius-lg;
+    border: 1px solid rgba($accent, 0.25);
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+
+.lightboxImg {
+  display: block;
+  width: 280px;
+  height: auto;
+  object-fit: cover;
+  object-position: top;
+
+  @include mobile {
+    width: min(260px, 80vw);
+  }
+}
+
+.lightboxClose {
+  @include button-reset;
+  position: absolute;
+  top: $sp-sm;
+  right: $sp-sm;
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-full;
+  background: rgba(0, 0, 0, 0.5);
+  color: $pure-white;
+  font-size: 1.2rem;
+  line-height: 1;
+  @include flex-center;
+  z-index: 3;
+  transition:
+    background $t-base,
+    transform $t-base;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+  }
+}
+
+@keyframes lightboxPop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

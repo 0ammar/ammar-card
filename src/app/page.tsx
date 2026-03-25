@@ -13,6 +13,8 @@ import { TbDeviceMobileCode } from "react-icons/tb";
 import { useTheme } from "@/context/ThemeContext";
 import { CONTACTS, PROFILE, TECH_STACK, type ActionId, type Phase } from "./page.logic";
 import styles from "./page.module.scss";
+import { BsSunFill } from "react-icons/bs";
+import { RiMoonClearFill } from "react-icons/ri";
 
 const CONTACT_ICONS: Record<string, React.ReactNode> = {
   email: <FaEnvelope size={16} />,
@@ -53,6 +55,7 @@ export default function Home() {
   const [copiedId, setCopiedId] = useState<ActionId>(null);
   const [loadingId, setLoadingId] = useState<ActionId>(null);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [photoOpen, setPhotoOpen] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setPhase("visible"), 80);
@@ -121,7 +124,7 @@ export default function Home() {
         data-mounted={mounted ? "true" : "false"}
       >
         <span className={styles.themeIcon} key={theme}>
-          {theme === "dark" ? <FiSun size={13} /> : <FiMoon size={13} />}
+          {theme === "dark" ? <BsSunFill size={14} /> : <RiMoonClearFill size={14} />}
         </span>
       </button>
 
@@ -139,19 +142,21 @@ export default function Home() {
         aria-label="Ammar Arab — Business Card"
         suppressHydrationWarning
       >
-        <div className={styles.avatarOuter}>
-          <div className={styles.avatarRing} aria-hidden="true" />
-          <div className={styles.avatarRing2} aria-hidden="true" />
-          <figure className={styles.avatarWrap}>
-            <Image
-              src={PROFILE.avatar}
-              alt="Ammar Arab"
-              width={88}
-              height={88}
-              className={styles.avatar}
-              priority
-            />
-          </figure>
+        <div className={styles.avatarOuter} onClick={() => setPhotoOpen(true)}>
+          <div className={styles.avatarOuter}>
+            <div className={styles.avatarRing} aria-hidden="true" />
+            <div className={styles.avatarRing2} aria-hidden="true" />
+            <figure className={styles.avatarWrap}>
+              <Image
+                src={PROFILE.avatar}
+                alt="Ammar Arab"
+                width={88}
+                height={88}
+                className={styles.avatar}
+                priority
+              />
+            </figure>
+          </div>
         </div>
 
         <header className={styles.identity}>
@@ -267,6 +272,34 @@ export default function Home() {
         <footer className={styles.footer}>
           <small>{PROFILE.footer}</small>
         </footer>
+        {photoOpen && (
+          <div
+            className={styles.lightbox}
+            onClick={() => setPhotoOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Profile photo"
+          >
+            <div className={styles.lightboxInner} onClick={(e) => e.stopPropagation()}>
+              <Image
+                src={PROFILE.avatar}
+                alt="Ammar Arab"
+                width={320}
+                height={380}
+                className={styles.lightboxImg}
+                priority
+              />
+              <button
+                type="button"
+                className={styles.lightboxClose}
+                onClick={() => setPhotoOpen(false)}
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
       </article >
     </div >
   );

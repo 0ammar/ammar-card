@@ -5,17 +5,17 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 type Theme = "light" | "dark";
 type ThemeCtx = { theme: Theme; toggle: () => void; mounted: boolean; };
 
-const Ctx = createContext<ThemeCtx>({ theme: "light", toggle: () => {}, mounted: false });
+const Ctx = createContext<ThemeCtx>({ theme: "light", toggle: () => { }, mounted: false });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme,   setThemeState] = useState<Theme>("light");
-  const [mounted, setMounted]    = useState(false);
+  const [theme, setThemeState] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem("theme") as Theme | null;
-      const sys    = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      const init   = stored === "light" || stored === "dark" ? stored : sys;
+      const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      const init = stored === "light" || stored === "dark" ? stored : "dark";
       setThemeState(init);
       document.documentElement.setAttribute("data-theme", init);
       if (!stored) localStorage.setItem("theme", init);
