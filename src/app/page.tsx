@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaAddressBook, FaEnvelope, FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
-import { FiCopy, FiDownload, FiMoon, FiPhone, FiSun } from "react-icons/fi";
+import { FiCopy, FiDownload, FiPhone } from "react-icons/fi";
 import {
   SiGit, SiJavascript, SiNestjs, SiNextdotjs,
   SiNodedotjs, SiPostgresql, SiPrisma, SiReact,
@@ -15,6 +15,7 @@ import { CONTACTS, PROFILE, TECH_STACK, type ActionId, type Phase } from "./page
 import styles from "./page.module.scss";
 import { BsSunFill } from "react-icons/bs";
 import { RiMoonClearFill } from "react-icons/ri";
+import { Intro } from "@/components";
 
 const CONTACT_ICONS: Record<string, React.ReactNode> = {
   email: <FaEnvelope size={16} />,
@@ -56,6 +57,8 @@ export default function Home() {
   const [loadingId, setLoadingId] = useState<ActionId>(null);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [photoOpen, setPhotoOpen] = useState(false);
+  const [ready, setReady] = useState(false);
+
 
   useEffect(() => {
     const t = setTimeout(() => setPhase("visible"), 80);
@@ -115,189 +118,194 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
-      <button
-        type="button"
-        className={styles.themeToggle}
-        onClick={toggle}
-        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        data-mounted={mounted ? "true" : "false"}
-      >
-        <span className={styles.themeIcon} key={theme}>
-          {theme === "dark" ? <BsSunFill size={14} /> : <RiMoonClearFill size={14} />}
-        </span>
-      </button>
+    <>
+      {!ready && <Intro onDone={() => setReady(true)} />}
+      <div className={`${styles.pageContent} ${ready ? styles.pageVisible : ""}`}>
 
-      <a
-        href={`tel:${PROFILE.phone}`}
-        className={styles.callCorner}
-        aria-label="Call Ammar"
-        onClick={(e) => handleNavigate("call", `tel:${PROFILE.phone}`, false, false, e)}
-      >
-        {loadingId === "call" ? <LoadingDot /> : <FiPhone size={14} />}
-      </a>
 
-      <article
-        className={`${styles.card} ${phase === "visible" ? styles.visible : ""}`}
-        aria-label="Ammar Arab — Business Card"
-        suppressHydrationWarning
-      >
-        <div className={styles.avatarOuter} onClick={() => setPhotoOpen(true)}>
-          <div className={styles.avatarOuter}>
-            <div className={styles.avatarRing} aria-hidden="true" />
-            <div className={styles.avatarRing2} aria-hidden="true" />
-            <figure className={styles.avatarWrap}>
-              <Image
-                src={PROFILE.avatar}
-                alt="Ammar Arab"
-                width={88}
-                height={88}
-                className={styles.avatar}
-                priority
-              />
-            </figure>
-          </div>
-        </div>
-
-        <header className={styles.identity}>
-          <h1 className={styles.name}>{PROFILE.name}</h1>
-          <p className={styles.jobTitle}>{PROFILE.title}</p>
-          <p className={styles.bio}>{PROFILE.bio}</p>
-        </header>
-
-        <div className={styles.resumeWrap}>
-          <a
-            href="/Ammar_Arab_Frontend_Developer.pdf"
-            download
-            className={styles.resumeBtn}
-            aria-label="Download Resume"
-            onClick={() => { setCopiedId("resume"); setTimeout(() => setCopiedId(null), 1600); }}
+        <div className={styles.wrapper}>
+          <button
+            type="button"
+            className={styles.themeToggle}
+            onClick={toggle}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            data-mounted={mounted ? "true" : "false"}
           >
-            {loadingId === "resume"
-              ? <LoadingDot />
-              : <><FiDownload size={13} /><span>Resume</span></>
-            }
+            <span className={styles.themeIcon} key={theme}>
+              {theme === "dark" ? <BsSunFill size={14} /> : <RiMoonClearFill size={14} />}
+            </span>
+          </button>
+
+          <a
+            href={`tel:${PROFILE.phone}`}
+            className={styles.callCorner}
+            aria-label="Call Ammar"
+            onClick={(e) => handleNavigate("call", `tel:${PROFILE.phone}`, false, false, e)}
+          >
+            {loadingId === "call" ? <LoadingDot /> : <FiPhone size={14} />}
           </a>
-          {copiedId === "resume" && (
-            <div className={styles.successOverlay} aria-live="polite">
-              <div className={styles.successCircle}>
-                <svg viewBox="0 0 52 52" className={styles.successSvg} aria-hidden="true">
-                  <circle cx="26" cy="26" r="25" className={styles.successBg} />
-                  <path d="M14 26 L22 34 L38 18" className={styles.successCheck} />
-                </svg>
-                <span className={styles.successText}>Downloaded!</span>
-              </div>
+
+          <article
+            className={`${styles.card} ${phase === "visible" ? styles.visible : ""}`}
+            aria-label="Ammar Arab — Business Card"
+            suppressHydrationWarning
+          >
+            <div className={styles.avatarOuter} onClick={() => setPhotoOpen(true)}>
+              <div className={styles.avatarRing} aria-hidden="true" />
+              <div className={styles.avatarRing2} aria-hidden="true" />
+              <figure className={styles.avatarWrap}>
+                <Image
+                  src={PROFILE.avatar}
+                  alt="Ammar Arab"
+                  width={88}
+                  height={88}
+                  className={styles.avatar}
+                  priority
+                />
+              </figure>
             </div>
-          )}
-        </div>
 
-        <hr className={styles.divider} aria-hidden="true" />
+            <header className={styles.identity}>
+              <h1 className={styles.name}>{PROFILE.name}</h1>
+              <p className={styles.jobTitle}>{PROFILE.title}</p>
+              <p className={styles.bio}>{PROFILE.bio}</p>
+            </header>
 
-        <nav className={styles.contactList} aria-label="Contact links">
-          {CONTACTS.map((c, i) => (
-            <div
-              key={c.id}
-              className={styles.contactRow}
-              data-index={i}
-            >
+            <div className={styles.resumeWrap}>
               <a
-                href={c.href}
-                className={`${styles.contactItem} ${loadingId === c.id ? styles.loading : ""}`}
-                data-contact={c.id}
-                target={c.external ? "_blank" : undefined}
-                rel={c.external ? "noopener noreferrer" : undefined}
-                download={"download" in c && c.download ? true : undefined}
-                aria-label={c.label}
-                onClick={(e) => handleNavigate(c.id, c.href, c.external ?? false, ("download" in c && !!c.download) ?? false, e)}
-                onMouseDown={() => handleLongPressStart(c.id, c.copyValue ?? null)}
-                onMouseUp={handleLongPressEnd}
-                onMouseLeave={handleLongPressEnd}
-                onTouchStart={() => handleLongPressStart(c.id, c.copyValue ?? null)}
-                onTouchEnd={handleLongPressEnd}
+                href="/Ammar_Arab_Frontend_Developer.pdf"
+                download
+                className={styles.resumeBtn}
+                aria-label="Download Resume"
+                onClick={() => { setCopiedId("resume"); setTimeout(() => setCopiedId(null), 1600); }}
               >
-                <span className={styles.contactIconWrap} data-contact={c.id}>
-                  {loadingId === c.id ? <LoadingDot /> : CONTACT_ICONS[c.id]}
-                </span>
-                <div className={styles.contactContent}>
-                  <span className={styles.contactLabel}>{c.label}</span>
-                  <span className={styles.contactValue}>{c.value}</span>
-                </div>
-                {c.copyValue && (
-                  <button
-                    type="button"
-                    className={styles.copyBtn}
-                    onClick={(e) => handleCopy(c.id, c.copyValue!, e)}
-                    aria-label={`Copy ${c.label}`}
-                    title="Copy"
-                  >
-                    <FiCopy size={12} />
-                  </button>
-                )}
+                {loadingId === "resume"
+                  ? <LoadingDot />
+                  : <><FiDownload size={13} /><span>Resume</span></>
+                }
               </a>
-              {(copiedId === c.id || copiedId === `long-${c.id}`) && (
+              {copiedId === "resume" && (
                 <div className={styles.successOverlay} aria-live="polite">
                   <div className={styles.successCircle}>
                     <svg viewBox="0 0 52 52" className={styles.successSvg} aria-hidden="true">
                       <circle cx="26" cy="26" r="25" className={styles.successBg} />
                       <path d="M14 26 L22 34 L38 18" className={styles.successCheck} />
                     </svg>
-                    <span className={styles.successText}>Copied!</span>
+                    <span className={styles.successText}>Downloaded!</span>
                   </div>
                 </div>
               )}
             </div>
-          ))
-          }
-        </nav >
 
-        <hr className={styles.divider} aria-hidden="true" />
+            <hr className={styles.divider} aria-hidden="true" />
 
-        <section aria-label="Tech Stack" className={styles.section}>
-          <span className={styles.label}>Stack</span>
-          <ul className={styles.techRow}>
-            {TECH_STACK.map((t) => (
-              <li
-                key={t.id}
-                className={styles.techIcon}
-                data-tech={t.id}
-                title={t.label}
-              >
-                {TECH_ICONS[t.id]}
-                <span className={styles.techTooltip}>{t.label}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+            <nav className={styles.contactList} aria-label="Contact links">
+              {CONTACTS.map((c, i) => (
+                <div
+                  key={c.id}
+                  className={styles.contactRow}
+                  data-index={i}
+                >
+                  <a
+                    href={c.href}
+                    className={`${styles.contactItem} ${loadingId === c.id ? styles.loading : ""}`}
+                    data-contact={c.id}
+                    target={c.external ? "_blank" : undefined}
+                    rel={c.external ? "noopener noreferrer" : undefined}
+                    download={"download" in c && c.download ? true : undefined}
+                    aria-label={c.label}
+                    onClick={(e) => handleNavigate(c.id, c.href, c.external ?? false, ("download" in c && !!c.download) ?? false, e)}
+                    onMouseDown={() => handleLongPressStart(c.id, c.copyValue ?? null)}
+                    onMouseUp={handleLongPressEnd}
+                    onMouseLeave={handleLongPressEnd}
+                    onTouchStart={() => handleLongPressStart(c.id, c.copyValue ?? null)}
+                    onTouchEnd={handleLongPressEnd}
+                  >
+                    <span className={styles.contactIconWrap} data-contact={c.id}>
+                      {loadingId === c.id ? <LoadingDot /> : CONTACT_ICONS[c.id]}
+                    </span>
+                    <div className={styles.contactContent}>
+                      <span className={styles.contactLabel}>{c.label}</span>
+                      <span className={styles.contactValue}>{c.value}</span>
+                    </div>
+                    {c.copyValue && (
+                      <button
+                        type="button"
+                        className={styles.copyBtn}
+                        onClick={(e) => handleCopy(c.id, c.copyValue!, e)}
+                        aria-label={`Copy ${c.label}`}
+                        title="Copy"
+                      >
+                        <FiCopy size={12} />
+                      </button>
+                    )}
+                  </a>
+                  {(copiedId === c.id || copiedId === `long-${c.id}`) && (
+                    <div className={styles.successOverlay} aria-live="polite">
+                      <div className={styles.successCircle}>
+                        <svg viewBox="0 0 52 52" className={styles.successSvg} aria-hidden="true">
+                          <circle cx="26" cy="26" r="25" className={styles.successBg} />
+                          <path d="M14 26 L22 34 L38 18" className={styles.successCheck} />
+                        </svg>
+                        <span className={styles.successText}>Copied!</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+              }
+            </nav >
 
-        {photoOpen && (
-          <div
-            className={styles.lightbox}
-            onClick={() => setPhotoOpen(false)}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Profile photo"
-          >
-            <div className={styles.lightboxInner} onClick={(e) => e.stopPropagation()}>
-              <Image
-                src={PROFILE.avatar}
-                alt="Ammar Arab"
-                width={320}
-                height={380}
-                className={styles.lightboxImg}
-                priority
-              />
-              <button
-                type="button"
-                className={styles.lightboxClose}
+            <hr className={styles.divider} aria-hidden="true" />
+
+            <section aria-label="Tech Stack" className={styles.section}>
+              <span className={styles.label}>Stack</span>
+              <ul className={styles.techRow}>
+                {TECH_STACK.map((t) => (
+                  <li
+                    key={t.id}
+                    className={styles.techIcon}
+                    data-tech={t.id}
+                    title={t.label}
+                  >
+                    {TECH_ICONS[t.id]}
+                    <span className={styles.techTooltip}>{t.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {photoOpen && (
+              <div
+                className={styles.lightbox}
                 onClick={() => setPhotoOpen(false)}
-                aria-label="Close"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Profile photo"
               >
-                ×
-              </button>
-            </div>
-          </div>
-        )}
-      </article >
-    </div >
+                <div className={styles.lightboxInner} onClick={(e) => e.stopPropagation()}>
+                  <Image
+                    src={PROFILE.avatar}
+                    alt="Ammar Arab"
+                    width={320}
+                    height={380}
+                    className={styles.lightboxImg}
+                    priority
+                  />
+                  <button
+                    type="button"
+                    className={styles.lightboxClose}
+                    onClick={() => setPhotoOpen(false)}
+                    aria-label="Close"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            )}
+          </article >
+        </div >
+      </div>
+    </>
   );
 }

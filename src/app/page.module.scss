@@ -7,10 +7,14 @@
 .wrapper {
   position: relative;
   width: min(400px, 96vw);
+  animation: pageEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 
-  @include mobile {
-    width: 100vw;
-  }
+  @include mobile { width: 100vw; }
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 // ─── Corner Buttons ─────────────────────────────────────────────────────────
@@ -25,6 +29,11 @@
   @include flex-center;
   cursor: pointer;
   z-index: 20;
+
+  @include mobile {
+    position: fixed;
+    top: $sp-md;
+  }
 }
 
 .callCorner {
@@ -97,35 +106,24 @@
 .card {
   position: relative;
   width: 100%;
-  max-height: 100dvh;
+  min-height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
-  overscroll-behavior: contain;
-  scrollbar-width: none;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
   background: var(--bg);
-  padding: 56px $sp-lg $sp-md;
+  padding: 56px $sp-lg $sp-lg;
   @include flex-col-center;
   gap: $sp-sm;
-  transform: translateY(16px);
-  transition:
-    background-color 0.35s ease,
-    opacity 0.5s $t-slow,
-    transform 0.5s $t-slow;
-
-  &.visible {
-    transform: translateY(0);
-  }
+  transition: background-color 0.35s ease;
 
   @include mobile {
-    height: 100dvh;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 56px $sp-md $sp-md;
-    justify-content: center;
+    padding: 60px $sp-md $sp-lg;
+    justify-content: flex-start;
   }
 }
 
@@ -236,7 +234,7 @@
 .jobTitle {
   font-size: 0.65rem;
   font-weight: 500;
-  color:  #1d4ed8;
+  color: #1d4ed8;
 
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -773,8 +771,6 @@
   overflow: hidden;
 
   cursor: default;
-
-
 }
 
 .lightboxImg {
@@ -821,4 +817,13 @@
     transform: scale(1);
     opacity: 1;
   }
+}
+
+
+.pageContent {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.1s;
+}
+.pageVisible {
+  opacity: 1;
 }
