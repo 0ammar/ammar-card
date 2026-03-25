@@ -766,7 +766,6 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   @include flex-center;
@@ -777,24 +776,11 @@
 
 .lightboxInner {
   position: relative;
-  border-radius: $radius-lg;
   overflow: hidden;
-  animation: lightboxPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow:
-    0 0 0 1px rgba($accent, 0.3),
-    0 32px 64px rgba(0, 0, 0, 0.5),
-    0 0 40px color-mix(in srgb, $accent 15%, transparent);
+
   cursor: default;
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: $radius-lg;
-    border: 1px solid rgba($accent, 0.25);
-    z-index: 2;
-    pointer-events: none;
-  }
+
 }
 
 .lightboxImg {
@@ -817,7 +803,6 @@
   width: 28px;
   height: 28px;
   border-radius: $radius-full;
-  background: rgba(0, 0, 0, 0.5);
   color: $pure-white;
   font-size: 1.2rem;
   line-height: 1;

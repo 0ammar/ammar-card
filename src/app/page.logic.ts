@@ -7,7 +7,7 @@ export const PROFILE = {
   bio: "I care about the details most developers skip.",
   footer: "© 2026 Ammar Arab",
   phone: "+962788482930",
-  avatar: "/me-5.png",
+  avatar: "/me-7.png",
 } as const;
 
 export const CONTACTS = [
