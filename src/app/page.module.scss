@@ -85,7 +85,7 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  background: var(--surface);
+  background: var(--bg);
   border-radius: $radius-lg;
   padding: 56px $sp-lg $sp-md;
   @include card-shadow;
