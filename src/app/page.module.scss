@@ -2,6 +2,8 @@
 @use "@/styles/mixins" as *;
 @use "@/styles/effects" as *;
 
+// ─── Layout ────────────────────────────────────────────────────────────────
+
 .wrapper {
   position: relative;
   width: min(400px, 96vw);
@@ -10,6 +12,8 @@
     width: 100vw;
   }
 }
+
+// ─── Corner Buttons ─────────────────────────────────────────────────────────
 
 .callCorner,
 .themeToggle {
@@ -20,7 +24,7 @@
   border-radius: $radius-full;
   @include flex-center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
 }
 
 .callCorner {
@@ -29,6 +33,7 @@
   color: $pure-white;
   border: none;
   box-shadow: 0 4px 14px rgba($accent, 0.4);
+  text-decoration: none;
   @include call-corner-btn;
 }
 
@@ -37,7 +42,20 @@
   background: var(--item-bg);
   color: var(--text);
   border: 1px solid var(--border);
-  transition: all $t-bounce, background-color 0.35s ease, color 0.2s ease;
+  transition:
+    background-color $t-base,
+    color $t-base,
+    border-color $t-base,
+    transform $t-bounce,
+    box-shadow $t-bounce;
+
+  &[data-mounted="false"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+  &[data-mounted="true"] {
+    opacity: 1;
+  }
 
   &:hover {
     background: color-mix(in srgb, $accent 12%, var(--surface));
@@ -48,15 +66,26 @@
   }
 }
 
+.themeIcon {
+  @include flex-center;
+  animation: themeIconIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// ─── Card ───────────────────────────────────────────────────────────────────
+
 .card {
   position: relative;
   width: 100%;
   max-height: 100dvh;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-  background: var(--bg);
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  background: var(--surface);
   border-radius: $radius-lg;
   padding: 56px $sp-lg $sp-md;
   @include card-shadow;
@@ -70,7 +99,10 @@
     opacity 0.5s $t-slow,
     transform 0.5s $t-slow;
 
-  &.visible { opacity: 1; transform: translateY(0); }
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   @include mobile {
     height: 100dvh;
@@ -81,30 +113,55 @@
   }
 }
 
-.themeIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: themeIconIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+// ─── Avatar ─────────────────────────────────────────────────────────────────
 
 .avatarOuter {
   position: relative;
   width: 94px;
   height: 94px;
-  border-radius: $radius-full;
   flex-shrink: 0;
+}
+
+.avatarRing {
+  position: absolute;
+  inset: -4px;
+  border-radius: $radius-full;
+  background: conic-gradient(
+    from 0deg,
+    $accent,
+    #60a5fa,
+    #1d4ed8,
+    #3b82f6,
+    $accent
+  );
+  animation: spinRing 3s linear infinite;
+  z-index: 0;
+}
+
+.avatarRing2 {
+  position: absolute;
+  inset: -8px;
+  border-radius: $radius-full;
+  background: conic-gradient(
+    from 180deg,
+    rgba($accent, 0),
+    rgba($accent, 0.35),
+    rgba(#60a5fa, 0.2),
+    rgba($accent, 0)
+  );
+  animation: spinRing 3s linear infinite reverse;
+  filter: blur(4px);
+  z-index: 0;
 }
 
 .avatarWrap {
   position: absolute;
-  inset: 0;
+  inset: 3px;
   border-radius: $radius-full;
   overflow: hidden;
   background: var(--surface);
   z-index: 1;
   transition: background-color 0.35s ease;
-  animation: avatarPulse 3s ease-in-out infinite;
 }
 
 .avatar {
@@ -112,9 +169,11 @@
   height: 100%;
   object-fit: cover;
   object-position: top;
+  display: block;
 }
 
-// Identity
+// ─── Identity ────────────────────────────────────────────────────────────────
+
 .identity {
   @include flex-col-center;
   gap: 4px;
@@ -148,7 +207,8 @@
   max-width: 100%;
 }
 
-// Resume
+// ─── Resume ──────────────────────────────────────────────────────────────────
+
 .resumeWrap {
   position: relative;
   @include flex-center;
@@ -156,7 +216,9 @@
 
 .resumeBtn {
   position: relative;
+  display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-align-items: center;
   align-items: center;
   gap: $sp-xs;
   padding: 8px $sp-md;
@@ -171,11 +233,24 @@
   border: 1px solid rgba($accent, 0.3);
   box-shadow: 0 6px 20px rgba($accent, 0.3);
   min-width: 110px;
+  -webkit-justify-content: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  @include resume-hover;
 }
 
+.resumeShine {
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-transform: translateX(-100%) skewX(-15deg);
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+}
 
-// Divider
+// ─── Divider ─────────────────────────────────────────────────────────────────
+
 .divider {
   width: 100%;
   height: 1px;
@@ -185,7 +260,8 @@
   @include divider-scanline;
 }
 
-// Contacts
+// ─── Contacts ────────────────────────────────────────────────────────────────
+
 .contactList {
   width: 100%;
   @include flex-col;
@@ -194,13 +270,30 @@
 
 .contactRow {
   position: relative;
+  display: -webkit-flex;
   display: flex;
+  -webkit-align-items: center;
   align-items: center;
   animation: contactSlideIn 0.4s ease both;
+
+  &[data-index="1"] {
+    animation-delay: 0.07s;
+  }
+  &[data-index="2"] {
+    animation-delay: 0.14s;
+  }
+  &[data-index="3"] {
+    animation-delay: 0.21s;
+  }
+  &[data-index="4"] {
+    animation-delay: 0.28s;
+  }
 }
 
 .contactItem {
+  display: -webkit-flex;
   display: flex;
+  -webkit-align-items: center;
   align-items: center;
   gap: $sp-sm;
   padding: 7px $sp-sm;
@@ -209,11 +302,69 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   color: var(--text);
   flex: 1;
-  @include contact-item-hover;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color $t-base,
+    transform $t-base,
+    box-shadow $t-base;
+
+  &:hover {
+    transform: translateX(5px);
+
+    .contactIconWrap {
+      transform: scale(1.1) rotate(-8deg);
+    }
+    .contactLabel,
+    .contactValue {
+      color: inherit;
+    }
+  }
 
   &.loading {
     pointer-events: none;
     opacity: 0.7;
+  }
+
+  // Per-contact hover colors
+  &[data-contact="email"]:hover {
+    background: color-mix(in srgb, #ea4335 6%, var(--surface));
+    box-shadow: 0 6px 20px color-mix(in srgb, #ea4335 18%, transparent);
+    .contactLabel,
+    .contactValue {
+      color: #ea4335;
+    }
+  }
+  &[data-contact="whatsapp"]:hover {
+    background: color-mix(in srgb, #25d366 6%, var(--surface));
+    box-shadow: 0 6px 20px color-mix(in srgb, #25d366 18%, transparent);
+    .contactLabel,
+    .contactValue {
+      color: #25d366;
+    }
+  }
+  &[data-contact="linkedin"]:hover {
+    background: color-mix(in srgb, #0a66c2 6%, var(--surface));
+    box-shadow: 0 6px 20px color-mix(in srgb, #0a66c2 18%, transparent);
+    .contactLabel,
+    .contactValue {
+      color: #0a66c2;
+    }
+  }
+  &[data-contact="github"]:hover {
+    background: color-mix(in srgb, #24292f 6%, var(--surface));
+    box-shadow: 0 6px 20px color-mix(in srgb, #24292f 18%, transparent);
+    .contactLabel,
+    .contactValue {
+      color: #24292f;
+    }
+  }
+  &[data-contact="vcf"]:hover {
+    background: color-mix(in srgb, #0ea5e9 6%, var(--surface));
+    box-shadow: 0 6px 20px color-mix(in srgb, #0ea5e9 18%, transparent);
+    .contactLabel,
+    .contactValue {
+      color: #0ea5e9;
+    }
   }
 }
 
@@ -228,6 +379,23 @@
   transition:
     transform $t-base,
     box-shadow $t-base;
+
+  // Per-contact backgrounds
+  &[data-contact="email"] {
+    background: linear-gradient(135deg, #f28b82, #ea4335);
+  }
+  &[data-contact="whatsapp"] {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+  }
+  &[data-contact="linkedin"] {
+    background: linear-gradient(135deg, #2196f3, #0a66c2);
+  }
+  &[data-contact="github"] {
+    background: linear-gradient(135deg, #6e7681, #24292f);
+  }
+  &[data-contact="vcf"] {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  }
 }
 
 .contactContent {
@@ -263,6 +431,7 @@
   color: var(--text-light);
   background: transparent;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
   transition: all $t-base;
 
   &:hover {
@@ -275,11 +444,14 @@
   }
 }
 
-// Success overlay
+// ─── Success ─────────────────────────────────────────────────────────────────
+
 .successOverlay {
   position: absolute;
   inset: 0;
   background: color-mix(in srgb, var(--surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   border-radius: $radius;
   @include flex-center;
   z-index: 20;
@@ -288,9 +460,7 @@
 }
 
 .successCircle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-center;
   gap: 4px;
   animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -325,9 +495,12 @@
   animation: fadeIn 0.3s ease 0.3s both;
 }
 
-// Loading dots
+// ─── Loading ─────────────────────────────────────────────────────────────────
+
 .loadingDot {
+  display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-align-items: center;
   align-items: center;
   gap: 3px;
 
@@ -346,7 +519,8 @@
   }
 }
 
-// Tech Stack — FIXED: overflow visible, no filter, proper z-index
+// ─── Tech Stack ───────────────────────────────────────────────────────────────
+
 .section {
   width: 100%;
   @include flex-col-center;
@@ -363,12 +537,14 @@
 }
 
 .techRow {
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
   gap: 8px;
+  -webkit-justify-content: center;
   justify-content: center;
   overflow: visible;
-  position: relative;
   padding-bottom: $sp-sm;
 }
 
@@ -377,12 +553,122 @@
   width: 36px;
   height: 36px;
   border-radius: $radius-full;
-  background: var(--tech-bg);
-  color: var(--tech-color);
   @include flex-center;
   cursor: default;
   z-index: 0;
-  @include tech-icon-hover;
+  transition:
+    transform $t-base,
+    box-shadow $t-base;
+
+  &:hover {
+    transform: translateY(-6px) scale(1.18);
+    z-index: 10;
+
+    .techTooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+  }
+
+  // Per-tech colors
+  &[data-tech="nextjs"] {
+    background: #000000;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+  &[data-tech="react"] {
+    background: #06b6d4;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(6, 182, 212, 0.45);
+    }
+  }
+  &[data-tech="typescript"] {
+    background: #3178c6;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(49, 120, 198, 0.45);
+    }
+  }
+  &[data-tech="javascript"] {
+    background: #ca8a04;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(202, 138, 4, 0.45);
+    }
+  }
+  &[data-tech="nodejs"] {
+    background: #16a34a;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(22, 163, 74, 0.45);
+    }
+  }
+  &[data-tech="nestjs"] {
+    background: #e0234e;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(224, 35, 78, 0.45);
+    }
+  }
+  &[data-tech="reactnative"] {
+    background: #7c3aed;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(124, 58, 237, 0.45);
+    }
+  }
+  &[data-tech="redux"] {
+    background: #764abc;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(118, 74, 188, 0.45);
+    }
+  }
+  &[data-tech="tailwind"] {
+    background: #0891b2;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(8, 145, 178, 0.45);
+    }
+  }
+  &[data-tech="scss"] {
+    background: #cc6699;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(204, 102, 153, 0.45);
+    }
+  }
+  &[data-tech="postgresql"] {
+    background: #4169e1;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(65, 105, 225, 0.45);
+    }
+  }
+  &[data-tech="prisma"] {
+    background: #1a202c;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(26, 32, 44, 0.5);
+    }
+  }
+  &[data-tech="git"] {
+    background: #f05032;
+    color: $pure-white;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(240, 80, 50, 0.45);
+    }
+  }
+  &[data-tech="vercel"] {
+    background: #e2e8f0;
+    color: #000000;
+    &:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+  }
 }
 
 .techTooltip {
@@ -415,7 +701,8 @@
   }
 }
 
-// Footer
+// ─── Footer ──────────────────────────────────────────────────────────────────
+
 .footer {
   width: 100%;
   text-align: center;
@@ -427,6 +714,8 @@
   }
 }
 
+// ─── Keyframes ───────────────────────────────────────────────────────────────
+
 @keyframes themeIconIn {
   from {
     transform: scale(0) rotate(-90deg);
@@ -437,17 +726,12 @@
     opacity: 1;
   }
 }
-@keyframes avatarPulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 3px $accent,
-      0 0 0 6px rgba($accent, 0.1),
-      0 0 18px rgba($accent, 0.2);
+
+@keyframes spinRing {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    box-shadow:
-      0 0 0 3px #7c3aed,
-      0 0 0 8px rgba(124, 58, 237, 0.12),
-      0 0 28px rgba(124, 58, 237, 0.38);
+  to {
+    transform: rotate(360deg);
   }
 }
