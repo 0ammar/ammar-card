@@ -173,7 +173,7 @@ export default function Home() {
 
             <div className={styles.resumeWrap}>
               <a
-                href="/Ammar_Arab_Frontend_Developer.pdf"
+                href="/Ammar_Arab_Next.js_Developer.pdf"
                 download
                 className={styles.resumeBtn}
                 aria-label="Download Resume"
