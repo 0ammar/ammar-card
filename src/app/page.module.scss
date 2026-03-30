@@ -45,7 +45,7 @@
 }
 
 .callCorner {
-  left: $sp-sm;
+  left: $sp-lg;
   background: linear-gradient(
     135deg,
     $accent,
@@ -59,7 +59,7 @@
 }
 
 .themeToggle {
-  right: $sp-sm;
+  right: $sp-lg;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text-muted);
