@@ -171,7 +171,7 @@ export default function Home() {
               <p className={styles.bio}>{PROFILE.bio}</p>
             </header>
 
-            {/* <div className={styles.resumeWrap}>
+            <div className={styles.resumeWrap}>
               <a
                 href="/Ammar_Arab_Next.js_Developer.pdf"
                 download
@@ -195,7 +195,7 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            </div> */}
+            </div>
 
             <hr className={styles.divider} aria-hidden="true" />
 
