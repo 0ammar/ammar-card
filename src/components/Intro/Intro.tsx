@@ -44,7 +44,7 @@ export default function Intro({ onDone }: { onDone: () => void }) {
           const d  = Math.sqrt(dx * dx + dy * dy);
           if (d < MAX_D) {
             ctx.globalAlpha = (1 - d / MAX_D) * 0.12;
-            ctx.strokeStyle = "#3b82f6";
+            ctx.strokeStyle = "#3164f4";
             ctx.lineWidth   = 0.5;
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
@@ -53,7 +53,7 @@ export default function Intro({ onDone }: { onDone: () => void }) {
           }
         }
         ctx.globalAlpha = 0.35;
-        ctx.fillStyle   = "#3b82f6";
+        ctx.fillStyle   = "#3164f4";
         ctx.beginPath();
         ctx.arc(pts[i].x, pts[i].y, 1.5, 0, Math.PI * 2);
         ctx.fill();

@@ -9,12 +9,20 @@
   width: min(400px, 96vw);
   animation: pageEnter 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 
-  @include mobile { width: 100vw; }
+  @include mobile {
+    width: 100vw;
+  }
 }
 
 @keyframes pageEnter {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // ─── Corner Buttons ─────────────────────────────────────────────────────────
@@ -38,10 +46,14 @@
 
 .callCorner {
   left: $sp-sm;
-  background: linear-gradient(135deg, $accent, #1d4ed8);
+  background: linear-gradient(
+    135deg,
+    $accent,
+    color-mix(in srgb, $accent, black 15%)
+  );
   color: $pure-white;
   border: none;
-  box-shadow: 0 4px 14px rgba($accent, 0.4);
+  box-shadow: 0 6px 20px rgba($accent, 0.3);
   text-decoration: none;
   @include call-corner-btn;
 }
@@ -151,13 +163,11 @@
     width: 6px;
     height: 6px;
     background: $accent;
+    box-shadow: 0 0 8px $accent;
     border-radius: $radius-full;
     top: -3px;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow:
-      0 0 6px $accent,
-      0 0 12px color-mix(in srgb, $accent 40%, transparent);
   }
 }
 
@@ -232,12 +242,14 @@
 }
 
 .jobTitle {
-  font-size: 0.65rem;
-  font-weight: 500;
-  color: #1d4ed8;
-
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: $accent;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+  background: color-mix(in srgb, $accent 6%, transparent);
+  padding: 3px 12px;
+  border-radius: 4px;
 }
 
 .bio {
@@ -264,7 +276,11 @@
   gap: $sp-xs;
   padding: 8px $sp-md;
   border-radius: $radius-full;
-  background: linear-gradient(135deg, $accent, #1d4ed8);
+  background: linear-gradient(
+    135deg,
+    $accent,
+    color-mix(in srgb, $accent, black 15%)
+  );
   color: $pure-white;
   font-family: var(--font-body);
   font-size: 0.78rem;
@@ -818,7 +834,6 @@
     opacity: 1;
   }
 }
-
 
 .pageContent {
   opacity: 0;

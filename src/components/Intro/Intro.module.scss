@@ -103,14 +103,22 @@
 
 .sub {
   font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(0.55rem, 2vw, 0.78rem);
-  font-weight: 700;
-  letter-spacing: 0.5em;
+  font-size: clamp(0.55rem, 2vw, 0.75rem);
+  font-weight: 800;
+  letter-spacing: 0.45em;
   text-transform: uppercase;
   color: $accent;
+  background: color-mix(in srgb, $accent 8%, transparent);
+  border: 1px solid color-mix(in srgb, $accent 25%, transparent);
+  padding: 6px 16px;
+  border-radius: 6px;
+  display: inline-block;
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(12px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 
-  &.subOn { opacity: 1; transform: translateY(0); }
+  &.subOn { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
 }
