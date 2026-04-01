@@ -127,7 +127,7 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  background: var(--bg);
+  background: transparent;
   padding: 56px $sp-lg $sp-lg;
   @include flex-col-center;
   gap: $sp-sm;
