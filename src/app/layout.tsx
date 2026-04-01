@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "@/styles/globals.scss";
 
 export const metadata: Metadata = {
@@ -26,8 +27,8 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "https://ammararab.com" },
   icons: {
-    icon:     "/me-7.png",
-    apple:    "/me-7.png",
+    icon: "/me-7.png",
+    apple: "/me-7.png",
     shortcut: "/me-7.png",
   },
 };
@@ -63,11 +64,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","YOUR_CLARITY_ID");`,
+          }}
+        />
       </head>
       <body>
         <Providers>{children}</Providers>
         <Analytics />
       </body>
-    </html>
+      <GoogleAnalytics gaId="G-75JC16C5LV" />
+      </html>
   );
 }
