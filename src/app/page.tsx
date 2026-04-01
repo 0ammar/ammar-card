@@ -15,7 +15,7 @@ import { CONTACTS, PROFILE, TECH_STACK, type ActionId, type Phase } from "./page
 import styles from "./page.module.scss";
 import { BsSunFill } from "react-icons/bs";
 import { RiMoonClearFill } from "react-icons/ri";
-import { Intro } from "@/components";
+import { Intro, NavigationLoader, ParticleBackground } from "@/components";
 
 const CONTACT_ICONS: Record<string, React.ReactNode> = {
   email: <FaEnvelope size={16} />,
@@ -58,6 +58,7 @@ export default function Home() {
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [photoOpen, setPhotoOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [navLoader, setNavLoader] = useState<{ active: boolean; label: string }>({ active: false, label: "" });
 
 
   useEffect(() => {
@@ -93,12 +94,15 @@ export default function Home() {
   ) => {
     if (download) return;
     e.preventDefault();
+    const label = id === "portfolio" ? "Opening Portfolio" : "Opening";
+    setNavLoader({ active: true, label });
     setLoadingId(id);
     setTimeout(() => {
       setLoadingId(null);
+      setNavLoader({ active: false, label: "" });
       if (external) window.open(href, "_blank", "noopener,noreferrer");
       else window.location.href = href;
-    }, 520);
+    }, 820);
   }, []);
 
   const handleLongPressStart = useCallback((id: string, value: string | null) => {
@@ -120,6 +124,9 @@ export default function Home() {
   return (
     <>
       {!ready && <Intro onDone={() => setReady(true)} />}
+      <ParticleBackground />
+      <NavigationLoader active={navLoader.active} label={navLoader.label} />
+
       <div className={`${styles.pageContent} ${ready ? styles.pageVisible : ""}`}>
 
 
@@ -179,10 +186,16 @@ export default function Home() {
                 aria-label="Download Resume"
                 onClick={() => { setCopiedId("resume"); setTimeout(() => setCopiedId(null), 1600); }}
               >
-                {loadingId === "resume"
-                  ? <LoadingDot />
-                  : <><FiDownload size={13} /><span>Resume</span></>
-                }
+                <FiDownload size={13} /><span>Resume</span>
+              </a>
+
+              <a
+                href="https://portfolio.ammararab.com"
+                className={`${styles.resumeBtn} ${styles.portfolioBtn}`}
+                aria-label="View Portfolio"
+                onClick={(e) => handleNavigate("portfolio", "https://portfolio.ammararab.com", true, false, e)}
+              >
+                <span>Portfolio</span>
               </a>
               {copiedId === "resume" && (
                 <div className={styles.successOverlay} aria-live="polite">
@@ -305,7 +318,7 @@ export default function Home() {
             )}
           </article >
         </div >
-      </div>
+      </div >
     </>
   );
 }

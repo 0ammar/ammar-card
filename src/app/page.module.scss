@@ -842,3 +842,20 @@
 .pageVisible {
   opacity: 1;
 }
+.resumeWrap {
+  @include flex-center;
+  gap: $sp-sm;
+  flex-wrap: wrap;
+}
+
+.portfolioBtn {
+  background: transparent;
+  color: $accent;
+  border: 1.5px solid color-mix(in srgb, $accent 45%, transparent);
+  box-shadow: none;
+
+  &:hover {
+    background: color-mix(in srgb, $accent 8%, transparent);
+    border-color: $accent;
+  }
+}
