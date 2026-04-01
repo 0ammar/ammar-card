@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
+import { Analytics } from "@vercel/analytics/react";
 import "@/styles/globals.scss";
 
 export const metadata: Metadata = {
@@ -25,8 +26,8 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "https://ammararab.com" },
   icons: {
-    icon: "/me-7.png",
-    apple: "/me-7.png",
+    icon:     "/me-7.png",
+    apple:    "/me-7.png",
     shortcut: "/me-7.png",
   },
 };
@@ -40,11 +41,14 @@ const jsonLd = {
   telephone: "+962788482930",
   url: "https://ammararab.com",
   image: "https://ammararab.com/me-7.png",
-  sameAs: ["https://linkedin.com/in/0ammar", "https://github.com/0ammar"],
+  sameAs: [
+    "https://linkedin.com/in/0ammar",
+    "https://github.com/0ammar",
+    "https://portfolio.ammararab.com",
+  ],
   knowsAbout: ["React.js", "Next.js", "TypeScript", "Node.js", "NestJS", "React Native"],
   address: { "@type": "PostalAddress", addressLocality: "Amman", addressCountry: "JO" },
 };
-
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -62,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
