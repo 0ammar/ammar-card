@@ -102,7 +102,7 @@ export default function Home() {
       setNavLoader({ active: false, label: "" });
       if (external) window.open(href, "_blank", "noopener,noreferrer");
       else window.location.href = href;
-    }, 820);
+    }, 500);
   }, []);
 
   const handleLongPressStart = useCallback((id: string, value: string | null) => {
