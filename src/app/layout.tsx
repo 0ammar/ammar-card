@@ -6,13 +6,13 @@ import "@/styles/globals.scss";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ammararab.com"),
-  title: "Ammar Arab — Software Engineer",
+  title: "Ammar Arab | Software Engineer",
   description: "Software Engineer specializing in React, Next.js, TypeScript, Node.js, NestJS, and React Native.",
   keywords: ["Ammar Arab", "Software Engineer", "React Developer", "Next.js", "TypeScript", "React Native", "Node.js", "NestJS", "Jordan", "Amman"],
   authors: [{ name: "Ammar Arab", url: "https://ammararab.com" }],
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Ammar Arab — Software Engineer",
+    title: "Ammar Arab | Software Engineer",
     description: "Building web & mobile applications end-to-end.",
     url: "https://ammararab.com",
     siteName: "Ammar Arab",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Ammar Arab — Software Engineer",
+    title: "Ammar Arab | Software Engineer",
     description: "Building web & mobile applications end-to-end.",
     images: ["/me-7.png"],
   },
