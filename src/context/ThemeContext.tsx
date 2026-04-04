@@ -15,7 +15,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem("theme") as Theme | null;
       const sys = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      const init = stored === "light" || stored === "dark" ? stored : "dark";
+      const init = stored === "light" || stored === "dark" ? stored : "light";
       setThemeState(init);
       document.documentElement.setAttribute("data-theme", init);
       if (!stored) localStorage.setItem("theme", init);
