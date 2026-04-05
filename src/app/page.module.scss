@@ -859,3 +859,124 @@
     border-color: $accent;
   }
 }
+
+// ─── Desktop Layout ──────────────────────────────────────────────────────────
+
+@media (min-width: 640px) {
+  .wrapper {
+    width: min(900px, 94vw);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 210px 88px 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 0;
+    row-gap: 20px;
+    min-height: 100dvh;
+    align-content: center;
+    align-items: start;
+    justify-items: stretch;
+    padding: 56px 40px;
+  }
+
+  // ── Column 1: Avatar → Identity → Resume ────────────
+
+  .avatarOuter {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .identity {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: center;
+  }
+
+  .resumeWrap {
+    grid-column: 1;
+    grid-row: 3;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-self: start;
+  }
+
+  // ── Column 2: Tech Stack — vertical strip ────────────
+
+  .section {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-self: center;
+    justify-self: center;
+    align-items: center;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 16px 10px;
+    gap: 6px;
+    width: 88px;
+  }
+
+  .label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    letter-spacing: 0.14em;
+    margin-bottom: 4px;
+  }
+
+  .techRow {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80px;
+    gap: 8px;
+    padding-bottom: 0;
+    justify-content: center;
+  }
+
+  .techIcon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  // ── Column 3: Contacts ────────────────────────────────
+
+  .contactList {
+    grid-column: 3;
+    grid-row: 1 / 4;
+    align-self: center;
+    gap: 10px;
+    padding-left: 28px;
+  }
+
+  .contactItem {
+    padding: 10px $sp-sm;
+  }
+
+  .contactIconWrap {
+    width: 38px;
+    height: 38px;
+  }
+
+  .contactLabel {
+    font-size: 0.75rem;
+  }
+
+  .contactValue {
+    font-size: 0.72rem;
+  }
+
+  // ── Hide both dividers ────────────────────────────────
+
+  .divider {
+    display: none;
+  }
+
+  // ── Footer full width ─────────────────────────────────
+
+  .footer {
+    grid-column: 1 / 4;
+    grid-row: 4;
+  }
+}
